@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#07110b">
+<meta name="description" content="Limited Hunter – Produkt-Watchlist, Deal-Scoring und Gewinnkalkulation.">
+<title>Limited Hunter</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="app-shell">
+  <header class="topbar">
+    <a class="brand" href="#" aria-label="Limited Hunter Startseite">
+      <span class="brand-mark">LH</span><span><b>LIMITED HUNTER</b><small>DROP INTELLIGENCE</small></span>
+    </a>
+    <div class="top-actions"><span class="system-state"><i></i><span id="systemLabel">LOKAL AKTIV</span></span><button class="icon-button" id="settingsBtn" aria-label="Einstellungen">⚙</button></div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="hero-copy">
+        <p class="kicker">DEALS FINDEN. ZAHLEN KENNEN. ENTSCHEIDEN.</p>
+        <h1>Hunt smarter.<br><em>Buy wiser.</em></h1>
+        <p class="sub">Deine Kommandozentrale für limitierte Produkte, Preisalarme und realistische Gewinnchancen.</p>
+      </div>
+      <div class="hero-orbit" aria-hidden="true"><div class="orbit-ring"></div><div class="orbit-core">LH</div><span class="orbit-dot"></span></div>
+      <div class="hero-metrics">
+        <div><strong id="metricTracked">0</strong><span>PRODUKTE</span></div>
+        <div><strong id="metricHot">0</strong><span>DEAL-CHANCEN</span></div>
+        <div><strong id="metricPotential">0 €</strong><span>POTENZIAL*</span></div>
+      </div>
+      <p class="micro-note">* Summe positiver, selbst eingetragener Kalkulationen – keine garantierte Rendite.</p>
+    </section>
+
+    <nav class="tabs" aria-label="Hauptnavigation">
+      <button class="tab active" data-tab="overview">Übersicht</button>
+      <button class="tab" data-tab="watchlist">Watchlist <span id="watchCount" class="tab-count">0</span></button>
+      <button class="tab" data-tab="calculator">Rechner</button>
+      <button class="tab" data-tab="guide">Guide</button>
+    </nav>
+
+    <section id="view-overview" class="view active">
+      <div class="section-title"><div><p class="kicker">COMMAND CENTER</p><h2>Dein Überblick</h2></div><button class="btn btn-primary" id="quickAdd">＋ Produkt</button></div>
+      <div class="dashboard-grid">
+        <article class="metric-card"><span class="metric-icon">◎</span><small>WATCHLIST</small><strong id="dashTracked">0</strong><span class="muted">Beobachtete Produkte</span></article>
+        <article class="metric-card"><span class="metric-icon">↗</span><small>DEAL-KANDIDATEN</small><strong id="dashHot">0</strong><span class="muted">Zielmarge erreicht</span></article>
+        <article class="metric-card"><span class="metric-icon">€</span><small>INVESTITIONSLIMIT</small><strong id="dashBudget">5.000 €</strong><span class="muted">Dein gesetztes Kapital</span></article>
+        <article class="metric-card"><span class="metric-icon">◷</span><small>LETZTE AKTUALISIERUNG</small><strong class="small-value" id="lastUpdated">Noch keine</strong><span class="muted">Manuell gepflegte Daten</span></article>
+      </div>
+      <div class="panel">
+        <div class="panel-heading"><div><p class="kicker">DEAL RADAR</p><h3>Beste Chancen</h3></div><button class="text-button" data-goto="watchlist">Alle ansehen →</button></div>
+        <div id="topDeals" class="deal-list"></div>
+      </div>
+      <div class="panel split-panel">
+        <div><p class="kicker">DEIN WORKFLOW</p><h3>So nutzt du den Hunter</h3><p class="muted">Produkt eintragen, Marktpreise prüfen, Kosten realistisch kalkulieren und erst dann entscheiden.</p></div>
+        <div class="workflow"><span>01 <b>Beobachten</b></span><span>02 <b>Kalkulieren</b></span><span>03 <b>Prüfen</b></span><span>04 <b>Entscheiden</b></span></div>
+      </div>
+    </section>
+
+    <section id="view-watchlist" class="view">
+      <div class="section-title"><div><p class="kicker">ALLE PRODUKTE</p><h2>Deine Watchlist</h2></div><button class="btn btn-primary" id="addProduct">＋ Hinzufügen</button></div>
+      <div class="toolbar">
+        <input id="searchInput" class="search" type="search" placeholder="Produkt, Kategorie oder Händler suchen…">
+        <select id="filterCategory" aria-label="Kategorie filtern"><option value="">Alle Kategorien</option><option>Gaming</option><option>Pokémon</option><option>LEGO</option><option>Sneaker</option><option>Technik</option><option>Sammler</option><option>Sonstiges</option></select>
+        <select id="filterStatus" aria-label="Status filtern"><option value="">Alle Status</option><option>Verfügbar</option><option>Vorbestellung</option><option>Ausverkauft</option><option>Beobachten</option></select>
+      </div>
+      <div id="watchlist" class="watchlist"></div>
+      <div class="empty-hint">Tipp: Trage nur Angebote und Verkaufspreise ein, die du tatsächlich überprüft hast. Der Hunter behauptet nicht, Händler live zu überwachen.</div>
+    </section>
+
+    <section id="view-calculator" class="view">
+      <div class="section-title"><div><p class="kicker">MARGIN LAB</p><h2>Gewinnrechner</h2></div></div>
+      <div class="panel calc-panel">
+        <p class="muted">Berechne den voraussichtlichen Überschuss eines einzelnen Verkaufs. Passe alle Werte an dein konkretes Angebot an.</p>
+        <div class="form-grid">
+          <label>Einkaufspreis (€)<input id="calcBuy" type="number" min="0" step=".01" value="600"></label>
+          <label>Verkaufspreis (€)<input id="calcSell" type="number" min="0" step=".01" value="850"></label>
+          <label>Plattform-/Zahlungsgebühren (€)<input id="calcFees" type="number" min="0" step=".01" value="75"></label>
+          <label>Versand & Verpackung (€)<input id="calcShip" type="number" min="0" step=".01" value="10"></label>
+          <label>Sonstige Kosten/Rücklage (€)<input id="calcOther" type="number" min="0" step=".01" value="15"></label>
+          <label>Geplante Stückzahl<input id="calcQty" type="number" min="1" max="100" step="1" value="1"></label>
+        </div>
+        <div class="calc-results">
+          <div><span>Überschuss pro Stück</span><strong id="calcProfit">150 €</strong></div>
+          <div><span>Gesamtüberschuss</span><strong id="calcTotal">150 €</strong></div>
+          <div><span>Rendite auf Einkauf</span><strong id="calcRoi">25,0 %</strong></div>
+        </div>
+        <p id="calcVerdict" class="verdict good">Interessanter Kandidat – Angaben und Nachfrage vor dem Kauf verifizieren.</p>
+        <button id="saveCalc" class="btn btn-secondary full">Kalkulation als Produkt speichern</button>
+      </div>
+      <p class="legal-note">Vereinfachte Planung, keine Steuer- oder Rechtsberatung. Bei gewerblichem Handel müssen insbesondere Steuern, Verbraucherrechte, Gewährleistung und weitere Betriebskosten berücksichtigt werden.</p>
+    </section>
+
+    <section id="view-guide" class="view">
+      <div class="section-title"><div><p class="kicker">PLAYBOOK</p><h2>Der sichere Deal-Prozess</h2></div></div>
+      <div class="panel guide-list">
+        <article><b>01 · Quelle prüfen</b><p>Bevorzuge offizielle Händlerseiten, autorisierte Produktfeeds und echte abgeschlossene Verkäufe als Vergleich. Ein hoher Angebotspreis ist noch kein erzielter Verkaufspreis.</p></article>
+        <article><b>02 · Verfügbarkeit bestätigen</b><p>Prüfe Lagerbestand und Lieferbedingungen direkt beim Händler. Dieser Prototyp liest Händlerseiten nicht automatisch aus.</p></article>
+        <article><b>03 · Gesamtkosten rechnen</b><p>Berücksichtige Einkauf, Plattformgebühren, Zahlungsgebühren, Versand, Verpackung, Rücksendungen und Steuern.</p></article>
+        <article><b>04 · Regeln einhalten</b><p>Keine Bots für Checkout, keine Umgehung von Warteschlangen, CAPTCHAs oder Mengenlimits. Kaufe nur innerhalb der Händlerbedingungen.</p></article>
+        <article><b>05 · Risiko begrenzen</b><p>Bei deinem Projektlimit von 5.000 € nicht alles auf einen Drop setzen. Erst Nachfrage und Marge bestätigen, dann schrittweise entscheiden.</p></article>
+      </div>
+      <div class="panel"><p class="kicker">DATEN & PRIVATSPHÄRE</p><h3>Deine Daten bleiben auf diesem Gerät</h3><p class="muted">Die Watchlist wird lokal im Browser gespeichert. Exportiere regelmäßig ein Backup. Keine Passwörter, Zahlungsdaten oder Händler-Logins hinterlegen.</p><div class="button-row"><button class="btn btn-secondary" id="exportBtn">Backup exportieren</button><button class="btn btn-secondary" id="importBtn">Backup importieren</button><button class="btn btn-danger" id="resetBtn">Daten zurücksetzen</button><input id="importFile" type="file" accept="application/json" hidden></div></div>
+    </section>
+  </main>
+  <footer>LIMITED HUNTER <span>v1.0 · BUILT FOR SMARTER DEALS</span></footer>
+</div>
+
+<dialog id="productModal">
+<form id="productForm">
+  <div class="modal-head"><div><p class="kicker">WATCHLIST MANAGER</p><h2 id="modalTitle">Produkt hinzufügen</h2></div><button type="button" class="icon-button" id="closeModal">✕</button></div>
+  <input type="hidden" name="id">
+  <label>Produktname<input name="name" required maxlength="100" placeholder="z. B. limitierte Konsole"></label>
+  <div class="form-grid">
+    <label>Kategorie<select name="category"><option>Gaming</option><option>Pokémon</option><option>LEGO</option><option>Sneaker</option><option>Technik</option><option>Sammler</option><option>Sonstiges</option></select></label>
+    <label>Status<select name="status"><option>Beobachten</option><option>Verfügbar</option><option>Vorbestellung</option><option>Ausverkauft</option></select></label>
+  </div>
+  <label>Händler<input name="shop" maxlength="80" placeholder="z. B. PlayStation Direct"></label>
+  <label>Produktlink<input name="url" type="url" placeholder="https://..."></label>
+  <div class="form-grid">
+    <label>Max. Einkaufspreis (€)<input name="buy" type="number" min="0" step=".01" value="700"></label>
+    <label>Erwarteter Verkauf (€)<input name="sell" type="number" min="0" step=".01" value="850"></label>
+    <label>Gebühren & Rücklage (€)<input name="costs" type="number" min="0" step=".01" value="50"></label>
+    <label>Versand (€)<input name="shipping" type="number" min="0" step=".01" value="10"></label>
+  </div>
+  <label>Notiz / Quelle<input name="notes" maxlength="200" placeholder="z. B. Verkaufspreis anhand beendeter Angebote geprüft"></label>
+  <div class="modal-actions"><button type="button" class="btn btn-secondary" id="cancelModal">Abbrechen</button><button type="submit" class="btn btn-primary">Speichern</button></div>
+</form>
+</dialog>
+
+<dialog id="settingsModal">
+<form id="settingsForm">
+  <div class="modal-head"><div><p class="kicker">PREFERENCES</p><h2>Einstellungen</h2></div><button type="button" class="icon-button" id="closeSettings">✕</button></div>
+  <label>Kapitalobergrenze (€)<input name="budget" type="number" min="0" step="100" value="5000"></label>
+  <label>Mindestüberschuss pro Stück (€)<input name="minProfit" type="number" min="0" step="10" value="150"></label>
+  <label class="check-label"><input name="notifications" type="checkbox"> Browser-Benachrichtigungen erlauben</label>
+  <p class="legal-note">Benachrichtigungen aus dieser lokalen Version sind Test-/Browsermeldungen. Echte Push-Alarme bei geschlossener App benötigen einen Push-Server und eine Datenquelle.</p>
+  <div class="modal-actions"><button type="button" class="btn btn-secondary" id="cancelSettings">Abbrechen</button><button type="submit" class="btn btn-primary">Übernehmen</button></div>
+</form>
+</dialog>
+<div id="toast" class="toast" role="status"></div>
+<script src="app.js"></script>
+</body>
+</html>
